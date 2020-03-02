@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AnnotateYoloImage
 {
@@ -31,6 +33,11 @@ namespace AnnotateYoloImage
         {
             return (int)obj;
         }
+
+        public static int ToRoundInt(this double obj)
+        {
+            return Math.Round(obj).ToInt();
+        }
     }
 
     public static class RectangleExtensins
@@ -38,6 +45,15 @@ namespace AnnotateYoloImage
         public static Point GetCenter(this Rectangle obj)
         {
             return new Point(obj.X + obj.Width / 2, obj.Y + obj.Height / 2);
+        }
+    }
+
+    public static class ControlExtension
+    {
+        public static void SetCtrlNoFucus(this Control button)
+        {
+            MethodInfo methodinfo = button.GetType().GetMethod("SetStyle", BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod);
+            methodinfo.Invoke(button, BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.InvokeMethod, null, new object[] { ControlStyles.Selectable, false }, Application.CurrentCulture);
         }
     }
 }

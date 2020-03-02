@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,9 @@ namespace AnnotateYoloImage
         {
             InitializeComponent();
             YOLOv3Files.YOLOv3Detector = tbYOLOv3Detector.Text;
+            btnSaveAnnotate.SetCtrlNoFucus();
+            btnSelYOLOv3Detector.SetCtrlNoFucus();
+            lbImageList.SetCtrlNoFucus();
         }
 
         private void FrmMain_Load(object sender, EventArgs e)
@@ -75,10 +79,10 @@ namespace AnnotateYoloImage
             {
                 var arr = boxInfo.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                 var classId = arr[0].ToInt();
-                var centerX = (arr[1].ToDouble() * width).ToInt();
-                var centerY = (arr[2].ToDouble() * height).ToInt();
-                var boxWidth = (arr[3].ToDouble() * width).ToInt();
-                var boxHeight = (arr[4].ToDouble() * height).ToInt();
+                var centerX = (arr[1].ToDouble() * width).ToRoundInt();
+                var centerY = (arr[2].ToDouble() * height).ToRoundInt();
+                var boxWidth = (arr[3].ToDouble() * width).ToRoundInt();
+                var boxHeight = (arr[4].ToDouble() * height).ToRoundInt();
                 var left = centerX - boxWidth / 2;
                 var top = centerY - boxHeight / 2;
                 var dr = new DragableRectangle() { Parent = pbImage, Left = left, Top = top, Width = boxWidth, Height = boxHeight, ClassId = classId };
@@ -375,6 +379,14 @@ namespace AnnotateYoloImage
             p.StartInfo.RedirectStandardError = false;//重定向标准错误输出
             p.StartInfo.CreateNoWindow = false;//不显示程序窗口
             p.Start();//启动程序
+        }
+
+        private void lbImageList_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Left || e.KeyCode==Keys.Right || e.KeyCode == Keys.Up ||e.KeyCode == Keys.Down)
+            {
+                e.Handled = true;
+            }
         }
     }
 }

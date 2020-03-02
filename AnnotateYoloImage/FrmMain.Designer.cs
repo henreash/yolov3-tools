@@ -78,6 +78,7 @@
             this.lbImageList.Size = new System.Drawing.Size(251, 469);
             this.lbImageList.TabIndex = 0;
             this.lbImageList.DoubleClick += new System.EventHandler(this.lbImageList_DoubleClick);
+            this.lbImageList.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lbImageList_KeyDown);
             // 
             // panel1
             // 
